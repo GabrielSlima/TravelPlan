@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/css/main.css">
+    <link rel="stylesheet" href="static/css/xs.css" media="screen and (max-width:575px)">
+    <link rel="stylesheet" href="static/css/sm.css" media="screen and (min-width:576px) and (max-width:767px)">
+    <link rel="stylesheet" href="static/css/md.css" media="screen and (min-width:768px)">
+
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+    <nav id="menu">
+        <h1>Travel plan</h1>
+        <input type="text" placeholder="Search" data-bind="value: filterValue">
+        <ul data-bind="foreach: filteredList">
+            <li><span data-bind="text: name"></span></li>
+        </ul>
+    </nav>
+
+    <div id="col-2">
+        <header><a href="#" id="btn-menu" onclick="openMenu();">Menu</a></header>
+        <main id='map'>
+        </main>
+    </div>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="static/js/ko/knockout.js"></script>
+    <script src="static/js/render_map.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDB1qJD-MzR8eOCU5RpK2jz0BJV9vLcnXc&libraries=geometry&v=3&callback=mapController.init" async defer></script>
+    <script src="static/js/menu.js"></script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+nav {
+    position: fixed;
+    width: 400%;
+    transform: translate(-400%, 0);
+}
+nav > h1{
+    font-size: 15px;
+    margin-top: 10px;
+}
+
+.open-menu {
+    width: 400%;
+}
+nav > ul > li > span{
+    color: #fff;
+    font-weight: 600;
+    display: block;
+    padding: .5em;
+    font-size: .675rem;
+}
+div#col-2 {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#col-2 > header {
+    width: 100%;
+    height: 10%;
+}
+
+#col-2 > main {
+    width: 100%;
+    height: 90%;
+}
