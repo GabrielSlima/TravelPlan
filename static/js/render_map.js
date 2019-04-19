@@ -3,6 +3,7 @@ var map;
 // MODEL OF OUR MAP
 var mapModel ={
     actualMapMarkers: [],
+    collectionOfMarkers: [],
     mapConfigs: {
         initial_location: {lat: -23.550270, lng: -46.636672},
         zoom: 8
@@ -23,8 +24,12 @@ var mapController = {
         return mapModel.mapConfigs.zoom;
     },
     getActualMapMarkers: function(){
-        var teste = mapModel.actualMapMarkers;
-        return teste;
+        var actualMapMarkers = mapModel.actualMapMarkers;
+        return actualMapMarkers;
+    },
+    getCollectionOfMarkers: function() {
+        var collectionOfMarkers = mapModel.collectionOfMarkers;
+        return collectionOfMarkers;
     },
     refreshMap: function(){
         view.renderMarkers();
@@ -66,6 +71,10 @@ var view = {
 
         var largeInfoWindow = new google.maps.InfoWindow();
 
+        var collectionOfMarkers = mapController.getCollectionOfMarkers();
+
+        var id;
+
         for(var i =0; i < locations.length; i++) {
 
             var position = locations[i].location;
@@ -87,7 +96,15 @@ var view = {
             marker.addListener('click', function(){
                 populateInfoWindow(this, largeInfoWindow);
             });
-            
+
+            id =  markers.length - 1;
+            collectionOfMarkers.push( {
+                id: '#' + id,
+                marker: marker});
+
+            $(collectionOfMarkers[markers.length-1].id).on('click', function(event) {
+                new google.maps.event.trigger(collectionOfMarkers[event.currentTarget.id].marker, 'click' );
+            });
             // THIS CREATE INFOWINDOWS FOR EACH MARKER
             var populateInfoWindow = function(marker, infoWindow){
                 

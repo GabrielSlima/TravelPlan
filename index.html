@@ -17,7 +17,7 @@
         <h1>Travel plan</h1>
         <input type="text" placeholder="Search" data-bind="value: filterValue">
         <ul data-bind="foreach: filteredList">
-            <li><span data-bind="text: name"></span></li>
+            <li><a href="#" data-bind="attr: {id: $index}"> <span data-bind="text: name"></span></a></li>
         </ul>
     </nav>
 
