@@ -3,8 +3,8 @@ var map;
 // MODEL OF OUR MAP
 var mapModel ={
     markers :[],
-    actualMapMarkers: [],
-    collectionOfMarkers: [],
+    listOfItemsInsideNav: [],
+    collectionOfMarkersWithId: [],
     mapConfigs: {
         initial_location: {lat: -23.550270, lng: -46.636672},
         zoom: 8
@@ -16,31 +16,35 @@ var mapController = {
     init: function() {
         view.init();
     },
-
-    getInitialLocation: function(){
+    getInitialLocation: function() {
         return mapModel.mapConfigs.initial_location;
     },
-
     getZoom: function(){
         return mapModel.mapConfigs.zoom;
     },
-    getActualMapMarkers: function(){
-        var actualMapMarkers = mapModel.actualMapMarkers;
-        return actualMapMarkers;
+    getlistOfItemsInsideNav: function() {
+        var listOfItemsInsideNav = mapModel.listOfItemsInsideNav;
+        return listOfItemsInsideNav;
     },
-    getCollectionOfMarkers: function() {
-        var collectionOfMarkers = mapModel.collectionOfMarkers;
-        return collectionOfMarkers;
+    getcollectionOfMarkersWithId: function() {
+        var collectionOfMarkersWithId = mapModel.collectionOfMarkersWithId;
+        return collectionOfMarkersWithId;
     },
     getMarkers: function() {
         var markers = mapModel.markers;
         return markers;
     },
-    resetCollectionOfMarkers: function (){
-        mapModel.collectionOfMarkers = [];
+    setcollectionOfMarkersWithId : function(collectionOfMarkersWithId) {
+        mapModel.collectionOfMarkersWithId = collectionOfMarkersWithId;
+    },
+    resetcollectionOfMarkersWithId: function (){
+        mapModel.collectionOfMarkersWithId = [];
     },
     resetMarkers: function() {
         mapModel.markers = [];
+    },
+    clearMap: function() {
+        for (var i = 0; i < mapModel.markers.length; i++ ) mapModel.markers[i].setMap(null);
     },
     refreshMap: function(){
         view.renderMarkers();
@@ -62,14 +66,14 @@ var view = {
         
         var zoom = mapController.getZoom();
         
-        var actualMapMarkers = mapController.getActualMapMarkers();
+        var listOfItemsInsideNav = mapController.getlistOfItemsInsideNav();
 
         map = new google.maps.Map(mapContainer, {
             center: initial_location,
             zoom: zoom
         });
 
-        if (actualMapMarkers.length > 0 ) this.renderMarkers();
+        if (listOfItemsInsideNav.length > 0 ) this.renderMarkers();
     },
 
     // THIS IS THE FUNCTION THAT WILL RENDER THE MARKERS ON OUR MAP
@@ -77,23 +81,20 @@ var view = {
 
         mapController.resetMarkers();
 
-        var markersModel = mapController.getMarkers();
+        var markersWithoutId = mapController.getMarkers();
         
         var markers = [];
 
-        var locations = mapController.getActualMapMarkers();
+        var locations = mapController.getlistOfItemsInsideNav();
 
         var bounds = new google.maps.LatLngBounds();
 
         var largeInfoWindow = new google.maps.InfoWindow();
 
-        mapController.resetCollectionOfMarkers();
+        mapController.resetcollectionOfMarkersWithId();
 
-        var collectionOfMarkers = mapController.getCollectionOfMarkers();
+        var collectionOfMarkersWithId = mapController.getcollectionOfMarkersWithId();
         
-        console.log('collectionOfMarkers');
-        console.log(collectionOfMarkers);
-        console.log('Filtered ids');
         for(var i =0; i < locations.length; i++) {
             
             var id = '#' + locations[i].id;
@@ -111,30 +112,18 @@ var view = {
             });
 
             markers.push(marker);
-            markersModel.push(marker);
+
+            markersWithoutId.push(marker);
+            
             bounds.extend(marker.position);
             
             marker.addListener('click', function(){
                 populateInfoWindow(this, largeInfoWindow);
             });
 
-            collectionOfMarkers.push( {
+            collectionOfMarkersWithId.push( {
                 id: id,
                 marker: marker});
-            console.log(collectionOfMarkers[markers.length-1].id);  
-            // $('.test').on('click', function(event) {
-
-            //     for (var j = 0; j < mapModel.markers.length; j++ ) {
-            //         new google.maps.event.trigger(mapModel.markers[j], 'closeClick' );
-                    
-            //       }
-                
-            //     var item = collectionOfMarkers.filter(item => item.id === '#' + event.currentTarget.id);
-            //     console.log("tentativa");
-            //     console.log(item);
-            //       console.log(event.currentTarget.id);
-            //     new google.maps.event.trigger(item[0].marker, 'click' );
-            // });
 
             // THIS CREATE INFOWINDOWS FOR EACH MARKER
             var populateInfoWindow = function(marker, infoWindow){
@@ -185,45 +174,11 @@ var view = {
                 }
             }
         }
-
-        mapModel.collectionOfMarkers = collectionOfMarkers;
-        console.log("Marcadores do mapa");
-        console.log(mapModel.markers);
-        console.log(markers);
+        mapController.setcollectionOfMarkersWithId(collectionOfMarkersWithId);
         map.fitBounds(bounds);
     }
 }
 
-function clearMap () {
-    for (var i = 0; i < mapModel.markers.length; i++ ) {
-        mapModel.markers[i].setMap(null);
-      }
-}
-
-
-function openInfoWindow(event) {
-
-        // for (var j = 0; j < mapModel.markers.length; j++ ) {
-        //     new google.maps.event.trigger(mapModel.markers[j], 'closeClick' );
-            
-        //   }
-        
-        // var item = mapModel.collectionOfMarkers.filter(item => item.id === '#' + event.currentTarget.id);
-        // console.log("tentativa");
-        // console.log(item);
-        //   console.log(event.currentTarget.id);
-        // new google.maps.event.trigger(item[0].marker, 'click' );
-        for (var j = 0; j < mapModel.markers.length; j++ ) {
-            new google.maps.event.trigger(mapModel.markers[j], 'closeClick' );
-            
-          }
-        
-        var item = mapModel.collectionOfMarkers.filter(item => item.id === '#' + event);
-        console.log("tentativa");
-        console.log(item);
-          console.log(event);
-        new google.maps.event.trigger(item[0].marker, 'click' );
-    }
 // THIS IS THE MODEL FOR OU PLACES
 function MyFavoritePlace( id, name, location) {
     self = this;
@@ -252,11 +207,24 @@ function ListViewModel(){
             new MyFavoritePlace(13, "Suomenlinna - Helsinki, Finland", {lat: 60.148162, lng: 24.987430  }),
             new MyFavoritePlace(14, "Milford Sound, New Zeland", {lat:-44.636473, lng: 167.898747})
         ]);
+    
+    self.openInfoWindow = function(element){
 
+        // CLOSE ALL OPENED INFOWINDOWS
+        for (var j = 0; j < mapModel.markers.length; j++ ) new google.maps.event.trigger(mapModel.markers[j], 'closeClick' );
+
+        var item = mapModel.collectionOfMarkersWithId.filter(item => item.id === '#' + element.id);
+        
+        new google.maps.event.trigger(item[0].marker, 'click' );
+    }
+
+    self.clearMap = function() {
+        for (var i = 0; i < mapModel.markers.length; i++ ) mapModel.markers[i].setMap(null);
+    }
     // THIS FILTER THE LIST BASED ON THE INPUT DATA
     self.filteredList = ko.computed(function (){
         
-        clearMap();
+        self.clearMap();
         
         var filter = self.filterValue();
         
@@ -264,7 +232,7 @@ function ListViewModel(){
         var newValues = self.places().filter(place => place.name.includes(filter));
         
         // SET THE ALCTUAL LIST OF DATA
-        mapModel.actualMapMarkers = newValues;
+        mapModel.listOfItemsInsideNav = newValues;
         
         // REFRESH THE MARKERS
         if(map) mapController.refreshMap();
