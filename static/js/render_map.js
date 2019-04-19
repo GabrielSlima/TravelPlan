@@ -2,6 +2,7 @@ var map;
 
 // MODEL OF OUR MAP
 var mapModel ={
+    markers :[],
     actualMapMarkers: [],
     collectionOfMarkers: [],
     mapConfigs: {
@@ -30,6 +31,16 @@ var mapController = {
     getCollectionOfMarkers: function() {
         var collectionOfMarkers = mapModel.collectionOfMarkers;
         return collectionOfMarkers;
+    },
+    getMarkers: function() {
+        var markers = mapModel.markers;
+        return markers;
+    },
+    resetCollectionOfMarkers: function (){
+        mapModel.collectionOfMarkers = [];
+    },
+    resetMarkers: function() {
+        mapModel.markers = [];
     },
     refreshMap: function(){
         view.renderMarkers();
@@ -63,19 +74,29 @@ var view = {
 
     // THIS IS THE FUNCTION THAT WILL RENDER THE MARKERS ON OUR MAP
     renderMarkers: function() {
+
+        mapController.resetMarkers();
+
+        var markersModel = mapController.getMarkers();
+        
         var markers = [];
-        
+
         var locations = mapController.getActualMapMarkers();
-        
+
         var bounds = new google.maps.LatLngBounds();
 
         var largeInfoWindow = new google.maps.InfoWindow();
 
+        mapController.resetCollectionOfMarkers();
+
         var collectionOfMarkers = mapController.getCollectionOfMarkers();
-
-        var id;
-
+        
+        console.log('collectionOfMarkers');
+        console.log(collectionOfMarkers);
+        console.log('Filtered ids');
         for(var i =0; i < locations.length; i++) {
+            
+            var id = '#' + locations[i].id;
 
             var position = locations[i].location;
             
@@ -90,21 +111,31 @@ var view = {
             });
 
             markers.push(marker);
-            
+            markersModel.push(marker);
             bounds.extend(marker.position);
             
             marker.addListener('click', function(){
                 populateInfoWindow(this, largeInfoWindow);
             });
 
-            id =  markers.length - 1;
             collectionOfMarkers.push( {
-                id: '#' + id,
+                id: id,
                 marker: marker});
+            console.log(collectionOfMarkers[markers.length-1].id);  
+            // $('.test').on('click', function(event) {
 
-            $(collectionOfMarkers[markers.length-1].id).on('click', function(event) {
-                new google.maps.event.trigger(collectionOfMarkers[event.currentTarget.id].marker, 'click' );
-            });
+            //     for (var j = 0; j < mapModel.markers.length; j++ ) {
+            //         new google.maps.event.trigger(mapModel.markers[j], 'closeClick' );
+                    
+            //       }
+                
+            //     var item = collectionOfMarkers.filter(item => item.id === '#' + event.currentTarget.id);
+            //     console.log("tentativa");
+            //     console.log(item);
+            //       console.log(event.currentTarget.id);
+            //     new google.maps.event.trigger(item[0].marker, 'click' );
+            // });
+
             // THIS CREATE INFOWINDOWS FOR EACH MARKER
             var populateInfoWindow = function(marker, infoWindow){
                 
@@ -155,13 +186,48 @@ var view = {
             }
         }
 
+        mapModel.collectionOfMarkers = collectionOfMarkers;
+        console.log("Marcadores do mapa");
+        console.log(mapModel.markers);
+        console.log(markers);
         map.fitBounds(bounds);
     }
 }
 
+function clearMap () {
+    for (var i = 0; i < mapModel.markers.length; i++ ) {
+        mapModel.markers[i].setMap(null);
+      }
+}
+
+
+function openInfoWindow(event) {
+
+        // for (var j = 0; j < mapModel.markers.length; j++ ) {
+        //     new google.maps.event.trigger(mapModel.markers[j], 'closeClick' );
+            
+        //   }
+        
+        // var item = mapModel.collectionOfMarkers.filter(item => item.id === '#' + event.currentTarget.id);
+        // console.log("tentativa");
+        // console.log(item);
+        //   console.log(event.currentTarget.id);
+        // new google.maps.event.trigger(item[0].marker, 'click' );
+        for (var j = 0; j < mapModel.markers.length; j++ ) {
+            new google.maps.event.trigger(mapModel.markers[j], 'closeClick' );
+            
+          }
+        
+        var item = mapModel.collectionOfMarkers.filter(item => item.id === '#' + event);
+        console.log("tentativa");
+        console.log(item);
+          console.log(event);
+        new google.maps.event.trigger(item[0].marker, 'click' );
+    }
 // THIS IS THE MODEL FOR OU PLACES
-function MyFavoritePlace(name, location) {
+function MyFavoritePlace( id, name, location) {
     self = this;
+    self.id = id;
     self.name = name;
     self.location = location;
 }
@@ -171,25 +237,27 @@ function ListViewModel(){
     var self = this;
     self.filterValue = ko.observable('');
     self.places = ko.observableArray([
-            new MyFavoritePlace("Dubai, United Arab Emirates", {lat: 25.238317, lng: 55.272560}),
-            new MyFavoritePlace("Dublin, Ireland", {lat:  53.350418, lng: -6.256612 }),
-            new MyFavoritePlace("Madrid, Spain", {lat:  40.432754, lng: -3.701094 }),
-            new MyFavoritePlace("Barcelona, Spain", {lat: 41.386752, lng: 2.170314 }),
-            new MyFavoritePlace("CN Tower, Canada", {lat:  43.642729, lng: -79.387743 }),
-            new MyFavoritePlace("Moraine Lake, Canada", {lat:  51.322650, lng: -116.186015 }),
-            new MyFavoritePlace("Gramado, Brazil", {lat:  -29.373412, lng: -50.876430 }),
-            new MyFavoritePlace("Burbank, USA", {lat: 49.342805, lng: -123.114882 }),
-            new MyFavoritePlace("Horseshoe Falls, Canada", {lat:  43.079570, lng: -79.075073 }),
-            new MyFavoritePlace("Lake Louise, Canada", {lat:  51.429395, lng: -116.175532 }),
-            new MyFavoritePlace("Skylon Tower, Canada", {lat: 43.085422, lng: -79.079026 }),
-            new MyFavoritePlace("Sunshine Village, Canada", {lat: 51.115341, lng: -115.761881 }),
-            new MyFavoritePlace("Suomenlinna - Helsinki, Finland", {lat: 60.148162, lng: 24.987430  }),
-            new MyFavoritePlace("Milford Sound, New Zeland", {lat:-44.636473, lng: 167.898747})
+            new MyFavoritePlace(1, "Dubai, United Arab Emirates", {lat: 25.238317, lng: 55.272560}),
+            new MyFavoritePlace(2, "Dublin, Ireland", {lat:  53.350418, lng: -6.256612 }),
+            new MyFavoritePlace(3, "Madrid, Spain", {lat:  40.432754, lng: -3.701094 }),
+            new MyFavoritePlace(4, "Barcelona, Spain", {lat: 41.386752, lng: 2.170314 }),
+            new MyFavoritePlace(5, "CN Tower, Canada", {lat:  43.642729, lng: -79.387743 }),
+            new MyFavoritePlace(6, "Moraine Lake, Canada", {lat:  51.322650, lng: -116.186015 }),
+            new MyFavoritePlace(7, "Gramado, Brazil", {lat:  -29.373412, lng: -50.876430 }),
+            new MyFavoritePlace(8, "Burbank, USA", {lat: 49.342805, lng: -123.114882 }),
+            new MyFavoritePlace(9, "Horseshoe Falls, Canada", {lat:  43.079570, lng: -79.075073 }),
+            new MyFavoritePlace(10, "Lake Louise, Canada", {lat:  51.429395, lng: -116.175532 }),
+            new MyFavoritePlace(11, "Skylon Tower, Canada", {lat: 43.085422, lng: -79.079026 }),
+            new MyFavoritePlace(12, "Sunshine Village, Canada", {lat: 51.115341, lng: -115.761881 }),
+            new MyFavoritePlace(13, "Suomenlinna - Helsinki, Finland", {lat: 60.148162, lng: 24.987430  }),
+            new MyFavoritePlace(14, "Milford Sound, New Zeland", {lat:-44.636473, lng: 167.898747})
         ]);
 
     // THIS FILTER THE LIST BASED ON THE INPUT DATA
     self.filteredList = ko.computed(function (){
-
+        
+        clearMap();
+        
         var filter = self.filterValue();
         
         // HOLD THE OBJECTS IN WHICH YOUR NAMES HAS THE STRING DATA FROM INPUT
