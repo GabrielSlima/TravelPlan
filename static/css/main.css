@@ -86,3 +86,58 @@ nav::-webkit-scrollbar-thumb {
     width: 200px;
     height: 200px;
   }
+
+.error {
+    color: #616161;
+    font-family: Roboto,Arial,sans-serif;
+    text-align: center;
+    font-size: 24px;
+}
+
+.gm-err-container {
+
+    height: 100%;
+    width: 100%;
+    display: table;
+    background-color: #e0e0e0;
+    position: relative;
+    left: 0;
+    top: 0;
+
+}
+.gm-err-content {
+
+    border-radius: 1px;
+    padding-top: 0;
+    padding-left: 10%;
+    padding-right: 10%;
+    position: static;
+    vertical-align: middle;
+    display: table-cell;
+
+}
+.gm-err-title {
+
+    margin: 5px;
+        margin-bottom: 5px;
+    margin-bottom: 20px;
+    color: #616161;
+    font-family: Roboto,Arial,sans-serif;
+    text-align: center;
+    font-size: 24px;
+
+}
+.gm-err-icon {
+
+    text-align: center;
+
+}
+.gm-err-message {
+
+    margin: 5px;
+    color: #757575;
+    font-family: Roboto,Arial,sans-serif;
+    text-align: center;
+    font-size: 12px;
+
+}

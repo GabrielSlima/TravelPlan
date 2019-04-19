@@ -29,7 +29,28 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script type="text/javascript" src="static/js/ko/knockout.js"></script>
     <script src="static/js/render_map.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDB1qJD-MzR8eOCU5RpK2jz0BJV9vLcnXc&libraries=geometry&v=3&callback=mapController.init" async defer></script>
+    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDB1qJD-MzR8eOCU5RpK2jz0BJV9vLcnXc&libraries=geometry&v=3&callback=mapController.init" async defer></script> -->
+    <script>
+        $(function (){
+            $.ajax({
+                type: 'GET',
+                processData: false,
+                dataType: "jsonp",
+                url: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDB1qJD-MzR8eOCU5RpK2jz0BJV9vLcnXc&libraries=geometry&v=3',
+                success: function (data){
+                    mapController.init();
+                },
+                error: function(){
+                    $('#map').html(
+                    '<div style="height: 100%; width: 100%; top: 0px; left: 0px; background-color: rgb(229, 227, 223);">' + 
+                    '<div class="gm-err-container"><div class="gm-err-content"><div class="gm-err-icon">' + 
+                    '<img src="https://maps.gstatic.com/mapfiles/api-3/images/icon_error.png" draggable="false"' +
+                    'style="-moz-user-select: none;"></div><div class="gm-err-title">Looks like something got wrong...</div>' + 
+                    '<div class="gm-err-message">Please, check the console and try again!</div></div></div></div>');
+                }                
+            });
+        });
+    </script>
     <script src="static/js/menu.js"></script>
 </body>
 </html>
