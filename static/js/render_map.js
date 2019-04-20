@@ -37,6 +37,13 @@ var mapController = {
     setcollectionOfMarkersWithId : function(collectionOfMarkersWithId) {
         mapModel.collectionOfMarkersWithId = collectionOfMarkersWithId;
     },
+    setDefaultHtml: function() {
+
+        var defaultHtml = '<a href="#" id="btn-menu" onclick="openMenu();">Menu</a>';
+        $('#header-map').removeClass('scroll-text');
+        $('#header-map').addClass('header-map');
+        $('#header-map').html(defaultHtml);
+    },
     resetcollectionOfMarkersWithId: function (){
         mapModel.collectionOfMarkersWithId = [];
     },
@@ -137,9 +144,7 @@ var view = {
                 infoWindow.marker = marker;
 
                 infoWindow.addListener('closeclick', function(){
-                    $('#header-map').removeClass('scroll-text');
-                    $('#header-map').addClass('header-map');
-                    $("#header-map").html('<a href="#" id="btn-menu" onclick="openMenu();">Menu</a>');
+                    mapController.setDefaultHtml();
                 });
                     
                     // THIS CREATE A NEW STREETVIEW INSTANCE
@@ -194,8 +199,6 @@ function MyFavoritePlace( id, name, location, articles) {
 function ListViewModel(){
     var self = this;
 
-    self.defaultHtml = '<a href="#" id="btn-menu" onclick="openMenu();">Menu</a>';
-    
     self.filterValue = ko.observable('');
 
     self.places = ko.observableArray([
@@ -215,11 +218,6 @@ function ListViewModel(){
             new MyFavoritePlace(14, "Milford Sound, New Zeland", {lat:-44.636473, lng: 167.898747}, [])
         ]);
 
-    self.setDefaultHtml = function() {
-        $('#header-map').removeClass('scroll-text');
-        $('#header-map').addClass('header-map');
-        $('#header-map').html(self.defaultHtml);}
-    
     self.getItemArticles = function(item) {
         var location = item.name;
         $.ajax({

@@ -16,7 +16,7 @@
         <header>
             <h1>Travel plan</h1><a href="#" id="btn-menu" onclick="openMenu();">X</a>
         </header>
-        
+
         <input type="text" placeholder="Search" data-bind="value: filterValue">
         <ul data-bind="foreach: filteredList">
             <li ><a href="#" class="test"  data-bind="attr: {id: id}, event: {click: $parent.openInfoWindow.bind($data)}"> <span data-bind="text: name"></span></a></li>
@@ -29,18 +29,16 @@
 
     </div>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script>
-        $(document).ready(function(){
-            $(window).resize(function(){
-                $('#header-map').removeClass('scroll-text');
-                $('#header-map').addClass('header-map');
-                $("#header-map").html('<a href="#" id="btn-menu" onclick="openMenu();">Menu</a>');
-            });
-        });
-    </script>
     <script type="text/javascript" src="static/js/ko/knockout.js"></script>
     <script src="static/js/render_map.js"></script>
     <script>
+        // THIS SCRIPT ENSURE THAT THE HEADER INSIDE col-2 HAS A menu BUTTON WHEN THE SCREEN IS RESIZED
+        $(document).ready(function(){
+                $(window).resize(function(){
+                    mapController.setDefaultHtml();
+                });
+        });
+        
         $(function (){
             $.ajax({
                 type: 'GET',
