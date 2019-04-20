@@ -127,7 +127,11 @@ var view = {
 
             // THIS CREATE INFOWINDOWS FOR EACH MARKER
             var populateInfoWindow = function(marker, infoWindow){
-                
+                if (marker.getAnimation() !== null) {
+                    marker.setAnimation(null);
+                  } else {
+                    marker.setAnimation(google.maps.Animation.BOUNCE);
+                  }
                 if(infoWindow.marker != marker) {
                     
                     infoWindow.setContent('');
@@ -180,13 +184,6 @@ var view = {
 }
 
 // THIS IS THE MODEL FOR OU PLACES
-
-function ArticlesAboutMyFavPlaces(favPlaceId, articles)
-{
-    self = this;
-    self.favPlaceId = favPlaceId;
-    self.articles = articles;
-}
 function MyFavoritePlace( id, name, location, articles) {
     self = this;
     self.id = id;
@@ -226,7 +223,6 @@ function ListViewModel(){
         $('#header-map').html(self.defaultHtml);}
     
     self.getItemArticles = function(item) {
-        var id = item.id;
         var location = item.name;
         $.ajax({
             type: 'GET',
