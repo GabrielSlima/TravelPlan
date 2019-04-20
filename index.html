@@ -12,19 +12,18 @@
     <title>Document</title>
 </head>
 <body>
-
     <nav id="menu">
         <h1>Travel plan</h1>
         <input type="text" placeholder="Search" data-bind="value: filterValue">
         <ul data-bind="foreach: filteredList">
-            <li><a href="#" class="test"  data-bind="attr: {id: id}, click: $parent.openInfoWindow.bind($data)"> <span data-bind="text: name"></span></a></li>
+            <li ><a href="#" class="test"  data-bind="attr: {id: id}, click: $parent.openInfoWindow.bind($data), event: { mouseover: $parent.getItemArticles, mouseout: $parent.setDefaultHtml}"> <span data-bind="text: name"></span></a></li>
         </ul>
     </nav>
 
     <div id="col-2">
-        <header><a href="#" id="btn-menu" onclick="openMenu();">Menu</a></header>
-        <main id='map'>
-        </main>
+        <header id="header-map" class="header-map"><a href="#" id="btn-menu" onclick="openMenu();">Menu</a></header>
+        <main id='map'></main>
+
     </div>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script type="text/javascript" src="static/js/ko/knockout.js"></script>

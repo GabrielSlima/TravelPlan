@@ -199,9 +199,10 @@ function MyFavoritePlace( id, name, location, articles) {
 function ListViewModel(){
     var self = this;
 
-    var articles  = [];
-
+    self.defaultHtml = '<a href="#" id="btn-menu" onclick="openMenu();">Menu</a>';
+    
     self.filterValue = ko.observable('');
+
     self.places = ko.observableArray([
             new MyFavoritePlace(1, "Dubai, United Arab Emirates", {lat: 25.238317, lng: 55.272560}, []),
             new MyFavoritePlace(2, "Dublin, Ireland", {lat:  53.350418, lng: -6.256612 }, []),
@@ -219,71 +220,36 @@ function ListViewModel(){
             new MyFavoritePlace(14, "Milford Sound, New Zeland", {lat:-44.636473, lng: 167.898747}, [])
         ]);
 
-        console.log(self.places());
-        
-    self.getArticles = function(id,location){
-        console.log(id);
+    self.setDefaultHtml = function() {
+        $('#header-map').removeClass('scroll-text');
+        $('#header-map').addClass('header-map');
+        $('#header-map').html(self.defaultHtml);}
+    
+    self.getItemArticles = function(item) {
+        var id = item.id;
+        var location = item.name;
         $.ajax({
             type: 'GET',
             processData: false,
             url: 'https://api.nytimes.com/svc/search/v2/articlesearch.json?q=' + location + '&api-key=pdcnycvY5voepeY1l4ec0nVQVZWcUeNz',
             success: function(data){
                 console.log('Success');
-                var article = new ArticlesAboutMyFavPlaces(id, data.response.docs);
-                articles.push(article);
-                console.log('Actual items inside article list:')
-                console.log(articles);
+                var html = '<h4>What NYTimes is talking about this place:</h4>';
+                for(var i = 0; i < data.response.docs.length; i++) {
+                    if(i == 3) break;
+                    console.log('<p>' + data.response.docs[i].snippet + '</p><br/>');
+                    html+='<p>' + data.response.docs[i].snippet + '</p><br/>';
+                }
+                $('#header-map').html(html);
+                $('#header-map').removeClass('header-map');
+                $('#header-map').addClass('scroll-text');
 
-                console.log('Trying to get the item with id' + id);
-                console.log(articles.filter(item => item.favPlaceId === id));
-                $('#'+id).parent('li').addClass('mouseEvent');
-                $('.mouseEvent').mouseover(function(){
-                    console.log('Abrir o overlay com uma lista com os artigos do objeto recuperado.');
-                    var current_id = $(this).children('a').attr('id');
-                    var current_item;
-                    console.log('This is the id of the actual item: ' + current_id);
-                    for(var i = 0; i < articles.length; i++) {
-                        console.log(current_id + ' is equal to ' + articles[i].favPlaceId);
-                        if(articles[i].favPlaceId == current_id) current_item = articles[i] 
-
-                    }
-                    console.log(current_item);
-                });
-            
-                $('.mouseEvent').mouseout(function(){
-                    console.log('Deveria TIRAR a div com os dados');
-                });
             },
             error: function() {
-                console.log('Error');
-                var article = new ArticlesAboutMyFavPlaces(id, 'Error');
-                articles.push(article);
-                $('#'+id).parent('li').addClass('mouseEvent');
-                $('.mouseEvent').mouseover(function(){
-                    var current_id = $(this).children('a').attr('id');
-                    var current_item;
-                    console.log('This is the id of the actual item: ' + current_id);
-                    for(var i = 0; i < articles.length; i++) {
-                        console.log(current_id + ' is equal to ' + articles[i].favPlaceId);
-                        if(articles[i].favPlaceId == current_id) current_item = articles[i] 
-
-                    }
-                    console.log(current_item);
-
-                });
-            
-                $('.mouseEvent').mouseout(function(){
-                    console.log(this.innerHTML);
-                });
+                $('#header-map').html('Error while trying to fetch data');
             }
         });
     }
-
-    for(var i = 0; i<self.places().length; i++) {
-        console.log(self.places()[i].articles);
-        self.getArticles(self.places()[i].id, self.places()[i].name);
-    }
-
     self.openInfoWindow = function(element){
 
         // CLOSE ALL OPENED INFOWINDOWS
