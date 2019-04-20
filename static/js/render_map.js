@@ -131,51 +131,49 @@ var view = {
                     marker.setAnimation(null);
                   } else {
                     marker.setAnimation(google.maps.Animation.BOUNCE);
-                  }
-                if(infoWindow.marker != marker) {
+                  } 
+                infoWindow.setContent('');
                     
-                    infoWindow.setContent('');
-                    
-                    infoWindow.marker = marker;
+                infoWindow.marker = marker;
 
-                    infoWindow.addListener('closeClick', function(){
-                        
-                        infoWindow.setMarker(null);
-                    });
+                infoWindow.addListener('closeclick', function(){
+                    $('#header-map').removeClass('scroll-text');
+                    $('#header-map').addClass('header-map');
+                    $("#header-map").html('<a href="#" id="btn-menu" onclick="openMenu();">Menu</a>');
+                });
                     
                     // THIS CREATE A NEW STREETVIEW INSTANCE
-                    var streetViewService = new google.maps.StreetViewService();
+                var streetViewService = new google.maps.StreetViewService();
                     
-                    var radius = 50;
+                var radius = 50;
                     
-                    function getStreetView(data, status) {
+                function getStreetView(data, status) {
                         
-                        if(status == google.maps.StreetViewStatus.OK) {
+                    if(status == google.maps.StreetViewStatus.OK) {
                             
-                            var nearStreetViewLocation = data.location.latLng;
+                        var nearStreetViewLocation = data.location.latLng;
                             
-                            var heading = google.maps.geometry.spherical.computeHeading (nearStreetViewLocation, marker.position);
+                        var heading = google.maps.geometry.spherical.computeHeading (nearStreetViewLocation, marker.position);
                             
-                            infoWindow.setContent('<div>' + marker.title + '</div><div id="pano"></div>');
+                        infoWindow.setContent('<div>' + marker.title + '</div><div id="pano"></div>');
                             
-                            var panoramaOptions = {
-                                position: nearStreetViewLocation,
-                                pov: {
-                                    heading: heading,
-                                    pitch: 30
-                                }
+                        var panoramaOptions = {
+                            position: nearStreetViewLocation,
+                            pov: {
+                                heading: heading,
+                                pitch: 30
                             }
-                            
-                            var panorama = new google.maps.StreetViewPanorama(document.getElementById('pano'), panoramaOptions);
-                        } else {
-                            infoWindow.setContent('<div>' + marker.title + '</div>' +'<div>No Street View Found</div>');
                         }
+                            
+                        var panorama = new google.maps.StreetViewPanorama(document.getElementById('pano'), panoramaOptions);
+                    } else {
+                        infoWindow.setContent('<div>' + marker.title + '</div>' +'<div>No Street View Found</div>');
                     }
-                    streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
-                    
-                    infoWindow.open(map, marker);
-
                 }
+                streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
+
+                infoWindow.open(map, marker);
+
             }
         }
         mapController.setcollectionOfMarkersWithId(collectionOfMarkersWithId);
@@ -242,14 +240,14 @@ function ListViewModel(){
 
             },
             error: function() {
-                $('#header-map').html('Error while trying to fetch data');
+                $('#header-map').html('Error while trying to fetch data.');
             }
         });
     }
     self.openInfoWindow = function(element){
-
+        self.getItemArticles(element);
         // CLOSE ALL OPENED INFOWINDOWS
-        for (var j = 0; j < mapModel.markers.length; j++ ) new google.maps.event.trigger(mapModel.markers[j], 'closeClick' );
+        for (var j = 0; j < mapModel.markers.length; j++ ) new google.maps.event.trigger(mapModel.markers[j], 'closeclick' );
 
         var item = mapModel.collectionOfMarkersWithId.filter(item => item.id === '#' + element.id);
    
