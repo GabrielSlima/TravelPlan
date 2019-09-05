@@ -10,7 +10,7 @@ pipeline {
 
     stage('Deploy - DEVELOP') {
         steps {
-            sh '\'O projeto acaba de ser entregue\''
+            sh ' echo \'O projeto acaba de ser entregue\''
         }
     }
   }
