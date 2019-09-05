@@ -11,16 +11,18 @@ pipeline {
         //     mvnHome = tool 'Maven3'
         // }
         
-       stage('Build application') {
-          withEnv(["MVN_HOME=$mvnHome"]){
-            //    sh '"$MVN_HOME/bin/mvn" clean org.jacoco:jacoco-maven-plugin:prepare-agent install -Dmaven.test.failure.ignore=false'
-            sh 'echo \'BUILD APPLICATION\''
-         }
-       }
-        
-      stage('Deploy application') {
-            sh 'echo RUN SCRIPT TO DEPLOY OUR APPLICATION'
-      }   
+        stages {
+            stage('Build application') {
+                withEnv(["MVN_HOME=$mvnHome"]){
+                    //    sh '"$MVN_HOME/bin/mvn" clean org.jacoco:jacoco-maven-plugin:prepare-agent install -Dmaven.test.failure.ignore=false'
+                    sh 'echo \'BUILD APPLICATION\''
+                }
+            }
+                
+            stage('Deploy application') {
+                    sh 'echo RUN SCRIPT TO DEPLOY OUR APPLICATION'
+            }
+        }
        notify("BUILD SUCCESS")
    }
    catch (error) {
