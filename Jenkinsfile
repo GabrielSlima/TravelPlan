@@ -2,13 +2,13 @@ pipeline {
   agent any
 
   stages {
-    stage('Build - DEVELOP') {
+    stage('Build - RELEASE') {
       steps {
         sh 'echo \'Funfooou\''
       }
     }
 
-    stage('Deploy - DEVELOP') {
+    stage('Deploy - RELEASE') {
         steps {
             sh ' echo \'O projeto acaba de ser entregue\''
         }
