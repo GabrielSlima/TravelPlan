@@ -1,4 +1,5 @@
 pipeline {
+    agent any
     notify('A pipeline just started')
     def mvnHome
    try {
