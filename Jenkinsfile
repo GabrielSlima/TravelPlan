@@ -2,15 +2,15 @@ pipeline {
   agent any
 
   stages {
-    stage('Build - DEVELOP') {
+    stage('Build - release') {
       steps {
         sh 'echo \'Funfooou\''
       }
     }
 
-    stage('Deploy - DEVELOP') {
+    stage('Deploy - release') {
         steps {
-            sh '\'O projeto acaba de ser entregue\''
+            sh ' echo \'O projeto acaba de ser entregue\''
         }
     }
   }
