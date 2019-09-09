@@ -1,6 +1,6 @@
 # Travel Plan App
 This app is a list of places that I plan to visit through 10 years...
-
+ 
 
 ## Requirements
 * Browser
