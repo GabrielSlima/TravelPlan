@@ -12,7 +12,7 @@ pipeline {
         // }
         
         stages {
-            stage('Build application') {
+            stage('Build - RELEASE') {
                 withEnv(["MVN_HOME=$mvnHome"]){
                     //    sh '"$MVN_HOME/bin/mvn" clean org.jacoco:jacoco-maven-plugin:prepare-agent install -Dmaven.test.failure.ignore=false'
                     sh 'echo \'BUILD APPLICATION\''
