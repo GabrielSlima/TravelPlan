@@ -3,7 +3,7 @@ pipeline {
     notify('A pipeline just started')
     def mvnHome
    try {
-        // stage('Clone git project') {
+        // stage('Clone git project - Production Environment') {
         //     sh 'git config --global http.sslverify false'
         //     git branch: '<PROJECT_BRANCH>',
         //     credentialsId: '<JENKINS_NETWORK_USER_CREDENTIAL_ID>',
