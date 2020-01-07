@@ -11,3 +11,6 @@ This app is a list of places that I plan to visit through 10 years...
 
 ## HOW TO CONTRIBUTE 
 You can find more instructions, if you're a beginner, of **how to contriute** in this project: https://github.com/GabrielSlima/WikiGames/blob/develop/CONTRIBUTING.md
+
+## LICENSE
+All files within this repo are released under the MIT (OSI) License - https://en.wikipedia.org/wiki/MIT_License  
